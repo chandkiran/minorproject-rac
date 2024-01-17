@@ -5,7 +5,7 @@ const registerUser = asyncHandler( async (req, res) => {
     if (
         [ email, username, password].some((field) => field?.trim() === "")
     ) {
-        throw new Error("Fill all the fields")
+        throw new Error("Fill out all the fields")
     }
 
     const existedUser = await User.findOne({
