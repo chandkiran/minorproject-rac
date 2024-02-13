@@ -1,9 +1,22 @@
-const Router = require("express")
-import express from "express"
-import registerUser from "./user.controller.js"
+import { Router } from "express";
+import { verifyJWT } from "./middleware/auth_middleware.js";
 
-const router = Router()
+import { registerUser, verifyUID } from "./user.controller.js";
+import { loginUser ,logoutUser,refreshAccessToken} from "./user.controller.js";
+import itemRouter from "./items.route.js"
 
-router.route("/signin").post(registerUser)
+const router = Router();
+
+router.route("/signup").post(registerUser);
+router.route("/signin").post(loginUser);
+
+router.route("/verifyUID").post(verifyUID);
+router.route("/logout").post(verifyJWT, logoutUser);
+router.route("/refresh-token").post(refreshAccessToken);
+// router.route("/updateItems").post(updateQuantity);
+
 
 export default router
+
+
+

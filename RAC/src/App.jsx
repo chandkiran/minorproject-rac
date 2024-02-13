@@ -1,28 +1,31 @@
-import React from "react";
-import Home from './pages/Home';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import Inventory_Login from "./pages/Login";
+import React, { useEffect } from "react";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import SignUpForm from "./pages/Signup";
+import SignInForm from "./pages/Inventory";
 import Error from "./pages/Error";
-import { Route,Routes } from "react-router-dom";
+import Dashboard from "./pages/dashboard";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import './index.css'
-
+import "./index.css";
+import { useCookies } from "react-cookie";
 
 function App() {
   return (
     <>
-    <Navbar/>
+      <Navbar />
       <Routes>
-        <Route exact path="/about" element={<About/>}/>
-        <Route exact path="/login" element={<Inventory_Login/>}/>
-        <Route exact path="/contact" element={<Contact/>}/>
-        <Route exact path="/" element={<Home/>}/>
-        <Route path="*" element={<Error/>}/>
+        <Route path="/about" element={<About />} />
+        <Route path="/signup" element={<SignUpForm />} />
+        <Route path="/signin" element={<SignInForm />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="*" element={<Error />} />
       </Routes>
-     
     </>
-  )
+  );
 }
 
 export default App;
