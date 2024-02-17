@@ -45,6 +45,13 @@ const Dashboard = () => {
       const totalQuantity = items.find(
         (item) => item.item_id === itemId
       ).quantity;
+       if (enteredQuantity > totalQuantity) {
+         alert(
+           `Entered quantity for ${itemId} is greater than total available quantity.`
+         );
+         return; 
+       }
+
       updatedQuantities[itemId] = totalQuantity - enteredQuantity;
     }
 
@@ -62,7 +69,7 @@ const Dashboard = () => {
       for (const itemId in data) {
         const enteredQuantity = parseInt(data[itemId] || 0);
         await axios.post("http://localhost:5001/items/addTotal", {
-          userId: cookies.id, // Assuming user object contains the user ID
+          userId: cookies.id, 
           itemId: itemId,
           quantity: enteredQuantity,
         });

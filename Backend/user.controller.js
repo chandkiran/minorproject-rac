@@ -63,30 +63,30 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-const verifyUID = async (req, res) => {
-  try {
-    console.log("Received Request:", req.body);
-    const { userID } = req.body;
+// const verifyUID = async (req, res) => {
+//   try {
+//     console.log("Received Request:", req.body);
+//     const { userID } = req.body;
 
-    if (!userID) {
-      throw new ApiError(400, "UID is required");
-    }
+//     if (!userID) {
+//       throw new ApiError(400, "UID is required");
+//     }
 
-    const user = await User.findOne({ userID });
+//     const user = await User.findOne({ userID });
 
-    if (!user) {
-      res.status(200).send("incorrect");
-      console.log("inc");
-      return;
-    }
+//     if (!user) {
+//       res.status(200).send("incorrect");
+//       console.log("inc");
+//       return;
+//     }
 
-    res.status(200).send("correct");
-    console.log("correct");
-  } catch (error) {
-    console.error("Error during UID verification:", error);
-    res.status(200).json({ message: "Internal server error" });
-  }
-};
+//     res.status(200).send("correct");
+//     console.log("correct");
+//   } catch (error) {
+//     console.error("Error during UID verification:", error);
+//     res.status(200).json({ message: "Internal server error" });
+//   }
+// };
 
 const loginUser = asyncHandler(async (req, res) => {
   const { userID, password } = req.body;
@@ -203,9 +203,44 @@ const getCurrentUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, req.user, "User fetched successfully"));
 });
 
+export const addTotal = async (req, res) => {
+  const { userId, itemId, quantity } = req.body;
+
+  try {
+    const foundItem = await Item.findOne({ item_id: itemId });
+
+    if (!foundItem) {
+      return res.status(404).json({
+        message: "Item not found",
+      });
+    }
+
+    const issued = await Issued.create({
+      _id: new mongoose.Types.ObjectId(),
+      quantity: quantity,
+      item: foundItem._id,
+      user: userId,
+    });
+
+    res.status(201).json(200, issued, "Item issued successfully");
+     setTimeout(async () => {
+      try {
+        await Issued.updateMany({ item: foundItem._id, user: userId }, { quantity: 0 });
+
+        console.log("Issued quantities reset to zero after 2 minutes");
+      } catch (error) {
+        console.error("Error resetting Issued quantities:", error);
+      }
+    },2*60*1000)
+  } catch (error) {
+    console.error("Error issuing item:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
 export {
   registerUser,
-  verifyUID,
   loginUser,
   logoutUser,
   refreshAccessToken,
