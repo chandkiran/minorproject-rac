@@ -9,6 +9,7 @@ import Dashboard from "./pages/dashboard";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import "./index.css";
+// import Footer from "./components/Footer";
 import { useCookies } from "react-cookie";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<Error />} />
       </Routes>
+    
     </>
   );
 }

@@ -12,6 +12,7 @@ const Dashboard = () => {
     formState: { errors },
   } = useForm();
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false); // Add loading state
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies();
 
@@ -37,56 +38,73 @@ const Dashboard = () => {
 
     navigate("/");
   };
+
   const onSubmitForm = async (data) => {
     const updatedQuantities = {};
 
-    for (const itemId in data) {
-      const enteredQuantity = parseInt(data[itemId] || 0);
-      const totalQuantity = items.find(
-        (item) => item.item_id === itemId
-      ).quantity;
-       if (enteredQuantity > totalQuantity) {
-         alert(
-           `Entered quantity for ${itemId} is greater than total available quantity.`
-         );
-         return; 
-       }
+    for (const item of items) {
+      const enteredQuantity = parseInt(data[item.item_id] || 0);
 
-      updatedQuantities[itemId] = totalQuantity - enteredQuantity;
+      if (enteredQuantity > 0) {
+        const totalQuantity = item.quantity;
+
+        if (enteredQuantity > totalQuantity) {
+          alert(
+            `Entered quantity for ${item.item_id} is greater than total available quantity.`
+          );
+          return;
+        }
+
+        updatedQuantities[item.item_id] = totalQuantity - enteredQuantity;
+      }
     }
+
+    setLoading(true); // Set loading to true during update
 
     // Update quantities
     try {
       await axios.post("http://localhost:5001/items/updateQuantity", {
         data: updatedQuantities,
       });
-    } catch (error) {
-      console.error("Error updating quantities:", error);
-    }
 
-    // Add total
-    try {
+      // Add total
       for (const itemId in data) {
         const enteredQuantity = parseInt(data[itemId] || 0);
-        await axios.post("http://localhost:5001/items/addTotal", {
-          userId: cookies.id, 
-          itemId: itemId,
-          quantity: enteredQuantity,
-        });
+        if (enteredQuantity > 0) {
+          await axios.post("http://localhost:5001/items/addTotal", {
+            userId: cookies.id,
+            itemId: itemId,
+            quantity: enteredQuantity,
+          });
+        }
       }
+       reset();
     } catch (error) {
-      console.error("Error adding total:", error);
+      console.error("Error updating quantities:", error);
+    } finally {
+      setLoading(false); // Set loading to false after update
     }
-
-    setItems((prevItems) =>
-      prevItems.map((item) => ({
-        ...item,
-        quantity: updatedQuantities[item.item_id],
-      }))
-    );
-
-    reset();
   };
+
+  // Fetch updated items after quantities have been updated
+  useEffect(() => {
+    const fetchUpdatedItems = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5001/items/getItems"
+        );
+        setItems(response.data);
+      } catch (error) {
+        console.error("Error fetching updated items:", error);
+      }
+    };
+
+    // Fetch updated items only when the loading state changes
+    if (!loading) {
+      fetchUpdatedItems();
+    }
+  }, [loading]);
+
 
   return (
     <div className="bg-gray-200 min-h-screen">
@@ -115,8 +133,9 @@ const Dashboard = () => {
           <button
             type="submit"
             className="bg-blue-500 text-white hover:bg-blue-600 font-bold py-2 px-4 rounded-md mt-4"
+            disabled={loading} // Disable button while loading
           >
-            Submit All Quantities
+            {loading ? "Updating..." : "Submit All Quantities"}
           </button>
         </form>
       </div>
