@@ -161,25 +161,33 @@ export const taken = async (req, res) => {
         userID: userID,
         item_id: itemID,
         quantity: quantity,
-        IssueDate:currentTime, 
-      });
-
-      return res.status(200).json({
-        message: "Operation successful",
-        newItem: newItem,
-      });
-    }
-
-  
-    return res.status(200).json({
-      message: "Received item information",
-      userID: userID,
-      itemID: itemID,
-      quantity: quantity,
+        IssueDate:new Date(), 
     });
+
+      return res.status(200).json(newItem)
+
+  }
+    // return res.status(200).json({
+    //   message: "Received item information",
+    //   userID: userID,
+    //   itemID: itemID,
+    //   quantity: quantity,
+    // });
   } catch (error) {
     console.error("Error during processing taken request:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const see=async(req,res) => {
+  const query = returnItem.find();
+
+  query
+    .then((documents) => {
+      res.status(200).json(documents);
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
+}
 

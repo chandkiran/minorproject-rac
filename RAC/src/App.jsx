@@ -6,6 +6,7 @@ import SignUpForm from "./pages/Signup";
 import SignInForm from "./pages/Inventory";
 import Error from "./pages/Error";
 import Dashboard from "./pages/dashboard";
+import SeeInventory from "./pages/seeInventory";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import "./index.css";
@@ -23,9 +24,9 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/see" element={<SeeInventory />} />
         <Route path="*" element={<Error />} />
       </Routes>
-    
     </>
   );
 }

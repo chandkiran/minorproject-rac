@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
@@ -137,6 +138,14 @@ const Dashboard = () => {
           >
             {loading ? "Updating..." : "Submit All Quantities"}
           </button>
+          <div>
+            <p className="text-gray-600 text-sm">
+              Want to see inventort?{" "}
+              <Link className="text-blue-500 underline" to="/see">
+                seee
+              </Link>
+            </p>
+          </div>
         </form>
       </div>
       <button
