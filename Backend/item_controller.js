@@ -82,7 +82,7 @@ export const addTotal = async (req, res) => {
       } catch (error) {
         console.error("Error deleting Issued documents:", error);
       }
-    }, 10 * 60* 1000);
+    }, 30 * 60* 1000);
   } catch (error) {
     console.error("Error issuing item:", error);
     return res.status(500).json({ message: "Internal server error" });

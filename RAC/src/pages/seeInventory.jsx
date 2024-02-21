@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import "./table.css";
 
 const SeeInventory = () => {
@@ -40,6 +41,14 @@ const SeeInventory = () => {
           </table>
         </div>
       ))}
+      <div>
+        <p className="text-gray-600 text-sm">
+          Access Inventory?{" "}
+          <Link className="text-blue-500 underline" to="/dashboard">
+            dashboard
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };

@@ -1,22 +1,29 @@
-import React, { useEffect } from "react";
-import Home from "./pages/Home";
+import React from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import Navbar from "./components/Navbar";
 import About from "./pages/About";
-import Contact from "./pages/Contact";
 import SignUpForm from "./pages/Signup";
 import SignInForm from "./pages/Inventory";
-import Error from "./pages/Error";
+import Contact from "./pages/Contact";
+import Home from "./pages/Home";
 import Dashboard from "./pages/dashboard";
 import SeeInventory from "./pages/seeInventory";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import "./index.css";
-// import Footer from "./components/Footer";
-import { useCookies } from "react-cookie";
+import Error from "./pages/Error";
 
 function App() {
+  const navigate = useNavigate();
+
+  // List of routes where Navbar should be hidden
+  const routesWithoutNavbar = [ "/dashboard", "/see"];
+
+  // Check if the current route is in the list of routes without Navbar
+  const shouldHideNavbar = routesWithoutNavbar.includes(
+    window.location.pathname
+  );
+
   return (
     <>
-      <Navbar />
+      {!shouldHideNavbar && <Navbar />}
       <Routes>
         <Route path="/about" element={<About />} />
         <Route path="/signup" element={<SignUpForm />} />
