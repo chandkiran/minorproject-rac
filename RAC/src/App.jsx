@@ -8,10 +8,12 @@ import Contact from "./pages/Contact";
 import Home from "./pages/Home";
 import Dashboard from "./pages/dashboard";
 import SeeInventory from "./pages/seeInventory";
+import Footer from  "./components/Footer/Footer";
 import Error from "./pages/Error";
 
 function App() {
   const navigate = useNavigate();
+
 
   // List of routes where Navbar should be hidden
   const routesWithoutNavbar = [ "/dashboard", "/see"];
@@ -34,6 +36,7 @@ function App() {
         <Route path="/see" element={<SeeInventory />} />
         <Route path="*" element={<Error />} />
       </Routes>
+     <Footer></Footer>
     </>
   );
 }
