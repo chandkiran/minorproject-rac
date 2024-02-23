@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
 const Home = () => {
   return (
-    <div className="h-screen px-2 lg:px-12 pt-20 lg:pt-24 flex flex-col lg:flex-row items-center lg:justify-between bg-gradient-to-r from-amber-200 to-yellow-400 overflow-hidden gap-4 lg:gap-8 my-4 lg:my-0">
+    <div className="h-screen px-2 lg:px-12 pt-20 lg:pt-24 flex flex-col lg:flex-row lg:justify-between bg-gradient-to-r from-amber-200 to-yellow-400 overflow-hidden gap-4 lg:gap-8 lg:my-0">
       <div className="flex flex-col gap-3 lg:gap-5 items-center lg:items-start lg:w-1/2 order-2 lg:order-1">
         <h1 className="text-8xl lg:text-[130px] font-bold lg:font-black">
           RAC
@@ -14,7 +14,7 @@ const Home = () => {
         </p>
         <button
           className="px-4 py-2 text-lg bg-amber-100 border-yellow-500 border-2 rounded-sm active:scale-95 duration-500 hover:bg-yellow-500 hover:text-white font-semibold"
-          onClick={() => alert("Button Clicked")}
+          onClick={() => alert('Button Clicked')}
         >
           Click Me
         </button>

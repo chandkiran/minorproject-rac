@@ -1,10 +1,10 @@
-import React from "react";
-import { Link } from "react-router-dom"; // Assuming you're using react-router for navigation
-import "./Footer.css"; // Your CSS file for styling the footer
+import React from 'react';
+import { Link } from 'react-router-dom'; // Assuming you're using react-router for navigation
+import './Footer.css'; // Your CSS file for styling the footer
 
 const Footer = () => {
   return (
-    <footer className="footer-container">
+    <footer className="footer-container px-4 py-8">
       <div className="footer-section">
         <h5>About Us</h5>
         <p>This is rac</p>
@@ -13,7 +13,7 @@ const Footer = () => {
         <h5>Contact</h5>
         <a href="mailto:rac@tcioe.edu.np">rac@tcioe.edu.np</a>
         <p>
-          {" "}
+          {' '}
           <a href="tel:+19864410395">Phone: 9864410395</a>
         </p>
       </div>

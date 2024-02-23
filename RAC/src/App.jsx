@@ -6,17 +6,14 @@ import SignUpForm from "./pages/Signup";
 import SignInForm from "./pages/Inventory";
 import Contact from "./pages/Contact";
 import Home from "./pages/Home";
-import Dashboard from "./pages/dashboard";
+import Dashboard from "./pages/Dashboard";
 import SeeInventory from "./pages/seeInventory";
-import Footer from  "./components/Footer/Footer";
 import Error from "./pages/Error";
+import Footer from "./components/Footer/Footer";
 
 function App() {
-  const navigate = useNavigate();
-
-
   // List of routes where Navbar should be hidden
-  const routesWithoutNavbar = [ "/dashboard", "/see"];
+  const routesWithoutNavbar = ["/dashboard", "/see"];
 
   // Check if the current route is in the list of routes without Navbar
   const shouldHideNavbar = routesWithoutNavbar.includes(
@@ -36,7 +33,7 @@ function App() {
         <Route path="/see" element={<SeeInventory />} />
         <Route path="*" element={<Error />} />
       </Routes>
-     <Footer></Footer>
+      <Footer />
     </>
   );
 }

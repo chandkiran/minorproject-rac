@@ -79,7 +79,7 @@ const Dashboard = () => {
           });
         }
       }
-       reset();
+      reset();
     } catch (error) {
       console.error("Error updating quantities:", error);
     } finally {
@@ -105,7 +105,6 @@ const Dashboard = () => {
       fetchUpdatedItems();
     }
   }, [loading]);
-
 
   return (
     <div className="bg-gray-200 min-h-screen">
