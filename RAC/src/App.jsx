@@ -12,28 +12,43 @@ import Error from "./pages/Error";
 import Footer from "./components/Footer/Footer";
 
 function App() {
-  // List of routes where Navbar should be hidden
-  const routesWithoutNavbar = ["/dashboard", "/see"];
+  const navigate = useNavigate();
 
-  // Check if the current route is in the list of routes without Navbar
-  const shouldHideNavbar = routesWithoutNavbar.includes(
+  // List of routes where Footer should be hidden
+  const routesWithoutFooter = ["/dashboard", "/see"];
+
+  // Check if the current route is in the list of routes without Footer
+  const shouldHideFooter = routesWithoutFooter.includes(
     window.location.pathname
   );
 
+  // Update the route, then check if the route is in the list of routes without Footer
+  const updateRouteAndCheckFooter = (newRoute) => {
+    navigate(newRoute);
+    const shouldHideFooter = routesWithoutFooter.includes(newRoute);
+    return shouldHideFooter;
+  };
+
   return (
     <>
-      {!shouldHideNavbar && <Navbar />}
+      {!shouldHideFooter && <Navbar />}
       <Routes>
         <Route path="/about" element={<About />} />
         <Route path="/signup" element={<SignUpForm />} />
         <Route path="/signin" element={<SignInForm />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/" element={<Home />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/see" element={<SeeInventory />} />
+        <Route
+          path="/dashboard"
+          element={<Dashboard checkFooter={updateRouteAndCheckFooter} />}
+        />
+        <Route
+          path="/see"
+          element={<SeeInventory checkFooter={updateRouteAndCheckFooter} />}
+        />
         <Route path="*" element={<Error />} />
       </Routes>
-      <Footer />
+      {!shouldHideFooter && <Footer />}
     </>
   );
 }

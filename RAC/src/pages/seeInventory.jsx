@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import "./table.css";
 
 const SeeInventory = () => {
   const [userData, setUserData] = useState([]);
@@ -17,34 +16,119 @@ const SeeInventory = () => {
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
+  const groupByUserId = () => {
+    const groupedData = {};
+    userData.forEach((item) => {
+      const userId = item.userID;
+      if (!groupedData[userId]) {
+        groupedData[userId] = [];
+      }
+      groupedData[userId].push(item);
+    });
+    return groupedData;
+  };
+
   return (
     <div>
-      <h2>User Data Table</h2>
-      {userData.map((item) => (
-        <div key={item._id}>
-          <h3>User: {item.userID}</h3>
-          <table>
+      <h1
+        style={{
+          color: "back",
+          textAlign: "center",
+          fontWeight: "bold",
+          marginBottom: "30px",
+          textDecoration: "underline",
+        }}
+      >
+        User Data Table
+      </h1>
+      {Object.entries(groupByUserId()).map(([userId, userItems]) => (
+        <div key={userId}>
+          <h3
+            style={{ color: "#555", textAlign: "center", fontWeight: "bold" }}
+          >
+            User ID: {userId}
+          </h3>
+          <table
+            style={{
+              width: "100%",
+              borderCollapse: "collapse",
+              marginTop: "15px",
+            }}
+          >
             <thead>
               <tr>
-                <th>Item ID</th>
-                <th>Quantity</th>
-                <th>Issue Date</th>
+                <th
+                  style={{
+                    backgroundColor: "#f2f2f2",
+                    padding: "8px",
+                    textAlign: "left",
+                  }}
+                >
+                  Item ID
+                </th>
+                <th
+                  style={{
+                    backgroundColor: "#f2f2f2",
+                    padding: "8px",
+                    textAlign: "left",
+                  }}
+                >
+                  Quantity
+                </th>
+                <th
+                  style={{
+                    backgroundColor: "#f2f2f2",
+                    padding: "8px",
+                    textAlign: "left",
+                  }}
+                >
+                  Issue Date
+                </th>
               </tr>
             </thead>
             <tbody>
-              <tr key={item._id}>
-                <td>{item.item_id}</td>
-                <td>{item.quantity}</td>
-                <td>{item.issueDate}</td>
-              </tr>
+              {userItems.map((item) => (
+                <tr key={item._id}>
+                  <td
+                    style={{
+                      border: "1px solid #ddd",
+                      padding: "8px",
+                      textAlign: "left",
+                    }}
+                  >
+                    {item.item_id}
+                  </td>
+                  <td
+                    style={{
+                      border: "1px solid #ddd",
+                      padding: "8px",
+                      textAlign: "left",
+                    }}
+                  >
+                    {item.quantity}
+                  </td>
+                  <td
+                    style={{
+                      border: "1px solid #ddd",
+                      padding: "8px",
+                      textAlign: "left",
+                    }}
+                  >
+                    {item.issueDate}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
       ))}
       <div>
-        <p className="text-gray-600 text-sm">
+        <p style={{ color: "#666", fontSize: "14px" }}>
           Access Inventory?{" "}
-          <Link className="text-blue-500 underline" to="/dashboard">
+          <Link
+            style={{ color: "#3498db", textDecoration: "underline" }}
+            to="/dashboard"
+          >
             dashboard
           </Link>
         </p>

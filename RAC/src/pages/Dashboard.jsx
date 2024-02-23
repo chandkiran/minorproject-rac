@@ -42,21 +42,24 @@ const Dashboard = () => {
 
   const onSubmitForm = async (data) => {
     const updatedQuantities = {};
+    console.log(data);
 
     for (const item of items) {
       const enteredQuantity = parseInt(data[item.item_id] || 0);
+      console.log(data);
+      console.log("ENTER", enteredQuantity);
 
       if (enteredQuantity > 0) {
         const totalQuantity = item.quantity;
 
         if (enteredQuantity > totalQuantity) {
-          alert(
-            `Entered quantity for ${item.item_id} is greater than total available quantity.`
-          );
+          alert(`Entered quantity is greater than total available quantity.`);
           return;
         }
 
         updatedQuantities[item.item_id] = totalQuantity - enteredQuantity;
+      } else if (enteredQuantity < 0) {
+        alert("Please enter valid quantity");
       }
     }
 
@@ -137,15 +140,15 @@ const Dashboard = () => {
           >
             {loading ? "Updating..." : "Submit All Quantities"}
           </button>
-          <div>
-            <p className="text-gray-600 text-sm">
-              Want to see inventort?{" "}
-              <Link className="text-blue-500 underline" to="/see">
-                seee
-              </Link>
-            </p>
-          </div>
         </form>
+        <div>
+          <p className="text-gray-600 text-sm">
+            See access history?{" "}
+            <Link className="text-blue-500 underline" to="/see">
+              seee
+            </Link>
+          </p>
+        </div>
       </div>
       <button
         onClick={handleLogout}

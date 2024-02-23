@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const schema = z.object({
   email: z.string().email("Email format is not valid"),
@@ -17,6 +17,8 @@ const SignUpForm = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: zodResolver(schema) });
+
+  const navigate = useNavigate();
 
   const onSubmitForm = async (data) => {
     const userID = data.userID.trim();
@@ -37,7 +39,9 @@ const SignUpForm = () => {
       }
     );
     const signUpResult = signUpResponse.data;
-    console.log(signUpResult.message);
+    if (signUpResult.success == true) {
+      navigate("/signin", { replace: true });
+    }
   };
 
   return (
@@ -109,10 +113,15 @@ const SignUpForm = () => {
 
         <div>
           <p className="text-gray-600 text-sm">
-            Already have an account?{" "}
-            <Link className="text-blue-500 underline" to="/signin">
-              Log In
-            </Link>
+            Already have an account?
+            <button
+              onClick={() => {
+                navigate("/signin", { replace: true });
+              }}
+              className="text-blue-500 underline"
+            >
+              LOG IN
+            </button>
           </p>
         </div>
       </form>
