@@ -105,7 +105,7 @@ export const addTotal = async (req, res) => {
         // Calculate the updated quantity for the Item collection
         const updatedItemQuantity =
           previousItemQuantity + updatedQuantity.quantity;
-          console.log(updatedItemQuantity)
+        console.log(updatedItemQuantity);
 
         // Update the Item database with the updated quantity
         await Item.findOneAndUpdate(
@@ -119,15 +119,12 @@ export const addTotal = async (req, res) => {
           error
         );
       }
-    }, 2 * 10 * 1000); // Corrected the timeout to 2 minutes
+    }, 2 * 60 * 1000); // Corrected the timeout to 2 minutes
   } catch (error) {
     console.error("Error issuing item:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-
-
-
 
 export const checked = async (req, res) => {
   const { userID } = req.body;
@@ -190,16 +187,7 @@ export const taken = async (req, res) => {
     }
 
     if (action === "done") {
-      function getDate() {
-        const currentDate = new Date();
-        const date = currentDate.getDate();
-        const month = currentDate.getMonth();
-        const year = currentDate.getFullYear();
-        const hour = currentDate.getHours();
-        const minute = currentDate.getMinutes();
-
-        return `${date}/${month}/${year} ${hour}:${minute}`;
-      }
+      
 
       await Issued.deleteMany({ userID, item_id: itemID, quantity: quantity });
 
@@ -208,7 +196,7 @@ export const taken = async (req, res) => {
         userID: userID,
         item_id: itemID,
         quantity: quantity,
-        issueDate: getDate(),
+        issueDate: date,
       });
 
       return res.status(200).json(newItem);
@@ -237,4 +225,61 @@ export const see = async (req, res) => {
     });
 };
 
-export const invalidquantity = async (req, res) => {};
+export const invalid = async (req, res) => {
+  const { userID, itemID, quantity } = req.body;
+  console.log("hi");
+  try {
+    console.log("again");
+    const foundItem = await Issued.findOne({ item_id: itemID });
+
+    if (foundItem && foundItem.quantity === quantity) {
+      // If quantity matches, create a new returnItem entry
+      const newItem = await returnItem.create({
+        _id: new mongoose.Types.ObjectId(),
+        userID: userID,
+        item_id: itemID,
+        quantity: quantity,
+        issueDate:date
+      });
+
+      res.status(200).json({ message: "Correct quantity", newItem });
+    } else {
+      // If quantity doesn't match, update the Item collection
+      // and create a returnItem entry with the returned quantity
+      console.log();
+      const updatedQuantity = foundItem ? foundItem.quantity - quantity : 0;
+      console.log(updatedQuantity);
+
+      await Item.findOneAndUpdate(
+        { item_id: itemID },
+        { $inc: { quantity: updatedQuantity } }
+      );
+
+      const newItem = await returnItem.create({
+        _id: new mongoose.Types.ObjectId(),
+        userID: userID,
+        item_id: itemID,
+        quantity: quantity,
+        issuedDate:date
+      });
+
+      res.status(200).json({ message: "Incorrect quantity", newItem });
+    }
+    await Issued.deleteOne({ item_id: itemID });
+  } catch (error) {
+    console.error("Error during invalid quantity:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+  
+};
+function getDate() {
+  const currentDate = new Date();
+  const date = currentDate.getDate();
+  const month = currentDate.getMonth();
+  const year = currentDate.getFullYear();
+  const hour = currentDate.getHours();
+  const minute = currentDate.getMinutes();
+
+  return `${date}/${month}/${year} ${hour}:${minute}`;
+}
+const date = getDate();
